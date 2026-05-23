@@ -43,25 +43,6 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-try:
-    _conn = psycopg.connect(
-        DATABASE_URL,
-        autocommit=True,
-        sslmode="require",
-        connect_timeout=10
-    )
-
-    print("✅ Connected to Supabase")
-
-    checkpointer = PostgresSaver(_conn)
-    checkpointer.setup()
-
-    print("✅ Checkpointer setup complete")
-
-except Exception as e:
-    print("❌ DATABASE ERROR:")
-    print(repr(e))
-
 # =========================================================
 # IMPORT TOOLS
 # =========================================================
@@ -531,14 +512,26 @@ graph.add_edge("final_agent", END)
 # POSTGRES CHECKPOINTER
 # =========================================================
 
-_conn = psycopg.connect(
-    DATABASE_URL,
-    autocommit=True
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-checkpointer = PostgresSaver(_conn)
+try:
+    _conn = psycopg.connect(
+        DATABASE_URL,
+        autocommit=True,
+        sslmode="require",
+        connect_timeout=10
+    )
 
-checkpointer.setup()
+    print("✅ Connected to Supabase")
+
+    checkpointer = PostgresSaver(_conn)
+    checkpointer.setup()
+
+    print("✅ Checkpointer setup complete")
+
+except Exception as e:
+    print("❌ DATABASE ERROR:")
+    print(repr(e))
 
 # =========================================================
 # COMPILE APP
