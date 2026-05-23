@@ -514,6 +514,8 @@ graph.add_edge("final_agent", END)
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+checkpointer = None
+
 try:
     _conn = psycopg.connect(
         DATABASE_URL,
@@ -533,9 +535,10 @@ except Exception as e:
     print("❌ DATABASE ERROR:")
     print(repr(e))
 
-# =========================================================
-# COMPILE APP
-# =========================================================
+
+if checkpointer is None:
+    raise Exception("Database connection failed")
+
 
 app = graph.compile(
     checkpointer=checkpointer
