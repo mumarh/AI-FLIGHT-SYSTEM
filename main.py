@@ -43,6 +43,25 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+try:
+    _conn = psycopg.connect(
+        DATABASE_URL,
+        autocommit=True,
+        sslmode="require",
+        connect_timeout=10
+    )
+
+    print("✅ Connected to Supabase")
+
+    checkpointer = PostgresSaver(_conn)
+    checkpointer.setup()
+
+    print("✅ Checkpointer setup complete")
+
+except Exception as e:
+    print("❌ DATABASE ERROR:")
+    print(repr(e))
+
 # =========================================================
 # IMPORT TOOLS
 # =========================================================
@@ -537,7 +556,7 @@ if __name__ == "__main__":
 
     config = {
         "configurable": {
-            "thread_id": "user_aarohi"
+            "thread_id": "THE HACKERS GROUP"
         }
     }
 
